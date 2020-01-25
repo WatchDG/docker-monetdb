@@ -6,7 +6,7 @@ wget https://www.monetdb.org/downloads/sources/Nov2019-SP1/MonetDB-11.35.9.tar.x
 tar xf MonetDB-11.35.9.tar.xz && cd MonetDB-11.35.9 && ldconfig -v && ./configure --enable-rintegration=yes && make
 
 FROM opensuse/tumbleweed
-RUN zypper -n update && zypper -n install make R-base
+RUN zypper -n update && zypper -n install make R-base-devel
 COPY --from=build /build/MonetDB-11.35.9 /build
 RUN cd /build && make install && rm -rf /build && zypper clean -a && ldconfig -v
 RUN mkdir -p /monetdb && echo $'#!/usr/bin/env sh\n\
