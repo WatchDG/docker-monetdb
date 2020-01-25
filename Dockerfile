@@ -24,5 +24,6 @@ if [ ! -d /monetdb/dbfarm/db ]; then\n\
 fi\n\
 monetdbd start -n /monetdb/dbfarm'\
 >> /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+VOLUME /monetdb
 EXPOSE 50000
 ENTRYPOINT /docker-entrypoint.sh
