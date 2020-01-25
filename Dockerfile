@@ -26,5 +26,5 @@ fi\n\
 monetdbd start -n /monetdb/dbfarm\n\
 '>> /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
 VOLUME /monetdb
-EXPOSE 50000
 ENTRYPOINT /docker-entrypoint.sh
+EXPOSE 50000
