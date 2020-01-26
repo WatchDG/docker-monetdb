@@ -1,9 +1,10 @@
 FROM opensuse/tumbleweed as build
-RUN zypper -n update && zypper -n install wget tar xz gcc openssl-devel make R-base-devel pcre-devel lzma-devel \
-libbz2-devel zlib-devel libicu-devel
-RUN mkdir -p /build && cd /build && \
-wget https://www.monetdb.org/downloads/sources/Nov2019-SP1/MonetDB-11.35.9.tar.xz && \
-tar xf MonetDB-11.35.9.tar.xz && cd MonetDB-11.35.9 && ldconfig && ./configure --enable-rintegration=yes && make
+WORKDIR /build
+RUN zypper -n update && zypper -n install wget tar xz gcc openssl-devel \
+make R-base-devel pcre-devel lzma-devel libbz2-devel zlib-devel libicu-devel
+RUN wget https://www.monetdb.org/downloads/sources/Nov2019-SP1/MonetDB-11.35.9.tar.xz && \
+tar xf MonetDB-11.35.9.tar.xz && cd MonetDB-11.35.9 && ldconfig -v && \
+./configure --enable-optimize=yes --enable-rintegration=yes && make
 
 FROM opensuse/tumbleweed
 RUN zypper -n update && zypper -n install make R-base
