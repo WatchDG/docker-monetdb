@@ -10,8 +10,7 @@ FROM opensuse/tumbleweed
 RUN zypper -n update && zypper -n install make R-base
 COPY --from=build /build/MonetDB-11.35.9 /build
 RUN cd /build && make install && rm -rf /build && zypper clean -a && ldconfig
-RUN mkdir -p /monetdb && echo $'\
-#!/usr/bin/env sh\n\
+RUN mkdir -p /monetdb && echo $'#!/usr/bin/env sh\n\
 if [ ! -d /monetdb/dbfarm ]; then\n\
   monetdbd create /monetdb/dbfarm\n\
 fi\n\
@@ -25,7 +24,7 @@ if [ ! -d /monetdb/dbfarm/db ]; then\n\
   monetdbd stop /monetdb/dbfarm\n\
 fi\n\
 monetdbd start -n /monetdb/dbfarm\n\
-'>> /docker-entrypoint.sh && chmod +x /docker-entrypoint.sh
+'> /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
 VOLUME /monetdb
-ENTRYPOINT /docker-entrypoint.sh
+ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 50000
