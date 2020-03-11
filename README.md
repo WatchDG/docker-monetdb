@@ -1,4 +1,5 @@
-# docker-monetdb-r
+# docker-monetdb
+
 [![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/watchdg/monetdb-r)
 
 ## R lang
