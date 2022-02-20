@@ -15,7 +15,7 @@ RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
     cmake --build . --target install && \
     cd / && \
     rm -r /tmp/build &&  \
-    apt-get remove -y --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3-dev  \
+    apt-get remove -y --purge --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3-dev  \
       python3-numpy-dev libbz2-dev uuid-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev &&  \
     apt-get clean &&  \
     mkdir -p /monetdb
