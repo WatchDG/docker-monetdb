@@ -1,10 +1,12 @@
 # docker-monetdb
 
-[![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/watchdg/monetdb-r)
+[![Docker Hub](https://img.shields.io/badge/docker-ready-blue.svg)](https://hub.docker.com/r/watchdg/monetdb)
 
-## R lang
+## Plugins
 
-### create function
+* embedded R
+
+### Embedded R
 
 #### example
 
@@ -18,10 +20,10 @@ select * from r_seq(1,15) where i > 10;
 ```
 ##### result
 
-| i |
-| :--- |
-| 11 |
-| 12 |
-| 13 |
-| 14 |
-| 15 |
+| i   |
+|:----|
+| 11  |
+| 12  |
+| 13  |
+| 14  |
+| 15  |
