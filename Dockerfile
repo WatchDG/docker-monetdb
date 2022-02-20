@@ -1,31 +1,25 @@
-FROM opensuse/tumbleweed as build
-WORKDIR /build
-RUN zypper -n update && zypper -n install wget tar xz gcc openssl-devel \
-make R-base-devel pcre-devel lzma-devel libbz2-devel zlib-devel libicu-devel
-RUN wget https://www.monetdb.org/downloads/sources/Nov2019-SP1/MonetDB-11.35.9.tar.xz && \
-tar xf MonetDB-11.35.9.tar.xz && cd MonetDB-11.35.9 && ldconfig -v && \
-./configure --enable-optimize=yes --enable-rintegration=yes && make
-
-FROM opensuse/tumbleweed
-RUN zypper -n update && zypper -n install make R-base
-COPY --from=build /build/MonetDB-11.35.9 /build
-RUN cd /build && make install && rm -rf /build && zypper clean -a && ldconfig
-RUN mkdir -p /monetdb && echo $'#!/usr/bin/env sh\n\
-set -e\n\
-if [ ! -d /monetdb/dbfarm ]; then\n\
-  monetdbd create /monetdb/dbfarm\n\
-fi\n\
-if [ ! -d /monetdb/dbfarm/db ]; then\n\
-  monetdbd start /monetdb/dbfarm\n\
-  monetdbd set logfile=/dev/stdout /monetdb/dbfarm\n\
-  monetdbd set listenaddr=0.0.0.0 /monetdb/dbfarm\n\
-  monetdb create db\n\
-  monetdb set embedr=true db\n\
-  monetdb release db\n\
-  monetdbd stop /monetdb/dbfarm\n\
-fi\n\
-monetdbd start -n /monetdb/dbfarm\n\
-'> /usr/local/bin/docker-entrypoint.sh && chmod +x /usr/local/bin/docker-entrypoint.sh
+FROM ubuntu:22.04
+RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
+    apt-get update &&  \
+    apt-get install -y bison cmake gcc libssl-dev pkg-config python3 python3-dev python3-numpy python3-numpy-dev  \
+      wget r-base r-base-dev libbz2-1.0 libbz2-dev uuid uuid-dev libpcre3 libpcre3-dev libreadline8 libreadline-dev  \
+      liblzma5 liblzma-dev zlib1g zlib1g-dev && \
+    mkdir /tmp/build && \
+    cd /tmp/build && \
+    wget https://www.monetdb.org/downloads/sources/Jan2022-SP1/MonetDB-11.43.9.tar.xz && \
+    tar -xf MonetDB-11.43.9.tar.xz && \
+    cd MonetDB-11.43.9 && \
+    cmake . -DWITH_BZ2=ON -DINT128=ON -DPY3INTEGRATION=ON -DRINTEGRATION=ON -DWITH_LZMA=ON -DWITH_PCRE=ON  \
+      -DWITH_READLINE=ON -DWITH_UUID=ON -DWITH_ZLIB=ON && \
+    cmake --build . &&  \
+    cmake --build . --target install && \
+    cd / && \
+    rm -r /tmp/build &&  \
+    apt-get remove -y --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3-dev  \
+      python3-numpy-dev libbz2-dev uuid-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev &&  \
+    apt-get clean &&  \
+    mkdir -p /monetdb
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 VOLUME /monetdb
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 50000
