@@ -4,7 +4,16 @@
 
 ## Plugins
 
+* embedded Python 3
 * embedded R
+
+### Embedded Python 3 
+
+#### example
+
+```sql
+
+```
 
 ### Embedded R
 

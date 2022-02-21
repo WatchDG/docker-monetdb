@@ -1,7 +1,7 @@
 FROM ubuntu:22.04
 RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
     apt-get update &&  \
-    apt-get install -y bison cmake gcc libssl-dev pkg-config python3 python3-dev python3-numpy python3-numpy-dev  \
+    apt-get install -y bison cmake gcc libssl-dev pkg-config python3.9 libpython3.9 python3.9-dev python3-numpy python3-numpy-dev  \
       wget r-base r-base-dev libbz2-1.0 libbz2-dev uuid uuid-dev libpcre3 libpcre3-dev libreadline8 libreadline-dev  \
       liblzma5 liblzma-dev zlib1g zlib1g-dev && \
     mkdir /tmp/build && \
@@ -15,11 +15,13 @@ RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
     cmake --build . --target install && \
     cd / && \
     rm -r /tmp/build &&  \
-    apt-get remove -y --purge --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3-dev  \
+    apt-get remove -y --purge --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3.9-dev  \
       python3-numpy-dev libbz2-dev uuid-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev &&  \
-    apt-get clean &&  \
-    mkdir -p /monetdb
+    apt-get clean && \
+    useradd --create-home --user-group monetdb && \
+    mkdir -p /var/lib/monetdb && chown monetdb:monetdb /var/lib/monetdb
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-VOLUME /monetdb
+USER monetdb:monetdb
+VOLUME /var/lib/monetdb
 ENTRYPOINT ["docker-entrypoint.sh"]
 EXPOSE 50000

@@ -1,16 +1,21 @@
 #!/usr/bin/env sh
 
+MONETDB_DIR=/var/lib/monetdb
+MONETDB_DBFARM_NAME=dbfarm
+MONETDB_DB_NAME=db
+
 set -e
-if [ ! -d /monetdb/dbfarm ]; then
-  monetdbd create /monetdb/dbfarm
+if [ ! -d ${MONETDB_DIR}/${MONETDB_DBFARM_NAME} ]; then
+  monetdbd create ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
 fi
-if [ ! -d /monetdb/dbfarm/db ]; then
-  monetdbd start /monetdb/dbfarm
-  monetdbd set logfile=/dev/stdout /monetdb/dbfarm
-  monetdbd set listenaddr=0.0.0.0 /monetdb/dbfarm
-  monetdb create db
-  monetdb set embedr=true db
-  monetdb release db
-  monetdbd stop /monetdb/dbfarm
+if [ ! -d ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}/${MONETDB_DB_NAME} ]; then
+  monetdbd start ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
+  monetdbd set logfile=/dev/stdout ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
+  monetdbd set listenaddr=all ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
+  monetdb create ${MONETDB_DB_NAME}
+  monetdb set embedpy3=true ${MONETDB_DB_NAME}
+  monetdb set embedr=true ${MONETDB_DB_NAME}
+  monetdb release ${MONETDB_DB_NAME}
+  monetdbd stop ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
 fi
-monetdbd start -n /monetdb/dbfarm
+monetdbd start -n ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
