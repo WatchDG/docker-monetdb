@@ -19,7 +19,8 @@ RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
       python3-numpy-dev libbz2-dev uuid-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev &&  \
     apt-get clean && \
     useradd --create-home --user-group monetdb && \
-    mkdir -p /var/lib/monetdb && chown monetdb:monetdb /var/lib/monetdb
+    mkdir -p /var/lib/monetdb &&  \
+    chown monetdb:monetdb /var/lib/monetdb
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 USER monetdb:monetdb
 VOLUME /var/lib/monetdb

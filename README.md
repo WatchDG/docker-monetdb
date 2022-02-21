@@ -12,7 +12,25 @@
 #### example
 
 ```sql
+CREATE FUNCTION py_version ()
+RETURNS STRING
+LANGUAGE python3 {
+  import sys
+  return sys.version
+};
+```
 
+##### query
+
+```sql
+SELECT py_version();
+```
+
+##### result
+
+```text
+3.9.10 (main, Jan 16 2022, 17:12:18) 
+[GCC 11.2.0]
 ```
 
 ### Embedded R
