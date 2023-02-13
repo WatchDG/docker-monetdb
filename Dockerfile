@@ -4,9 +4,9 @@ RUN apt-get update &&  \
     apt-get install -y python3-dev libbz2-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev
 RUN mkdir /tmp/build &&  \
     cd /tmp/build &&  \
-    wget https://www.monetdb.org/downloads/sources/Sep2022-SP1/MonetDB-11.45.11.tar.xz &&  \
-    tar -xf MonetDB-11.45.11.tar.xz &&  \
-    cd MonetDB-11.45.11 &&  \
+    wget https://www.monetdb.org/downloads/sources/Sep2022-SP2/MonetDB-11.45.13.tar.xz &&  \
+    tar -xf MonetDB-11.45.13.tar.xz &&  \
+    cd MonetDB-11.45.13 &&  \
     cmake -DSTRICT=ON -DINT128=ON -DGEOM=ON -DPY3INTEGRATION=ON -DWITH_BZ2=ON -DWITH_PCRE=ON -DWITH_READLINE=ON -DWITH_LZMA=ON -DWITH_ZLIB=ON . &&  \
     cmake --build . &&  \
     cmake --build . --target install &&  \
