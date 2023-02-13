@@ -1,24 +1,19 @@
-FROM ubuntu:22.04
-RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime &&  \
-    apt-get update &&  \
-    apt-get install -y bison cmake gcc libssl-dev pkg-config python3.9 libpython3.9 python3.9-dev python3-numpy python3-numpy-dev  \
-      wget r-base r-base-dev libbz2-1.0 libbz2-dev uuid uuid-dev libpcre3 libpcre3-dev libreadline8 libreadline-dev  \
-      liblzma5 liblzma-dev zlib1g zlib1g-dev && \
-    mkdir /tmp/build && \
-    cd /tmp/build && \
-    wget https://www.monetdb.org/downloads/sources/Jan2022-SP1/MonetDB-11.43.9.tar.xz && \
-    tar -xf MonetDB-11.43.9.tar.xz && \
-    cd MonetDB-11.43.9 && \
-    cmake . -DWITH_BZ2=ON -DINT128=ON -DPY3INTEGRATION=ON -DRINTEGRATION=ON -DWITH_LZMA=ON -DWITH_PCRE=ON  \
-      -DWITH_READLINE=ON -DWITH_UUID=ON -DWITH_ZLIB=ON && \
+FROM debian:bullseye-slim
+RUN apt-get update && apt-get install -y wget xz-utils bison cmake gcc pkg-config python3 &&  \
+    apt-get install -y python3-dev libbz2-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev
+RUN mkdir /tmp/build &&  \
+    cd /tmp/build &&  \
+    wget https://www.monetdb.org/downloads/sources/Sep2022-SP1/MonetDB-11.45.11.tar.xz &&  \
+    tar -xf MonetDB-11.45.11.tar.xz &&  \
+    cd MonetDB-11.45.11 &&  \
+    cmake -DSTRICT=ON -DINT128=ON -DGEOM=ON -DPY3INTEGRATION=ON -DWITH_BZ2=ON -DWITH_PCRE=ON -DWITH_READLINE=ON -DWITH_LZMA=ON -DWITH_ZLIB=ON . &&  \
     cmake --build . &&  \
-    cmake --build . --target install && \
-    cd / && \
-    rm -r /tmp/build &&  \
-    apt-get remove -y --purge --auto-remove bison cmake gcc libssl-dev pkg-config wget r-base-dev python3.9-dev  \
-      python3-numpy-dev libbz2-dev uuid-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev &&  \
-    apt-get clean && \
-    useradd --create-home --user-group monetdb && \
+    cmake --build . --target install &&  \
+    cd / &&  \
+    rm -r /tmp/build && \
+    apt-get remove -y --purge --auto-remove wget xz-utils bison cmake gcc pkg-config && \
+    apt-get remove -y --purge --auto-remove python3-dev libbz2-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev && \
+    useradd --create-home --user-group monetdb &&  \
     mkdir -p /var/lib/monetdb &&  \
     chown monetdb:monetdb /var/lib/monetdb
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh

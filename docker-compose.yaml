@@ -1,0 +1,10 @@
+version: "3"
+services:
+  monetdb:
+    build:
+      dockerfile: Dockerfile
+      context: .
+    ports:
+      - "50000:50000"
+    volumes:
+      - "./monetdb:/var/lib/monetdb"

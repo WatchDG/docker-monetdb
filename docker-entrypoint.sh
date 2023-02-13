@@ -4,8 +4,8 @@ MONETDB_DIR=/var/lib/monetdb
 MONETDB_DBFARM_NAME=dbfarm
 MONETDB_DB_NAME=db
 
-MONETDB_EMBEDDED_R=${MONETDB_EMBEDDED_R:=true}
 MONETDB_EMBEDDED_PYTHON3=${MONETDB_EMBEDDED_PYTHON3:=true}
+#MONETDB_EMBEDDED_R=${MONETDB_EMBEDDED_R:=true}
 
 set -e
 if [ ! -d ${MONETDB_DIR}/${MONETDB_DBFARM_NAME} ]; then
@@ -21,9 +21,9 @@ if [ ! -d ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}/${MONETDB_DB_NAME} ]; then
     monetdb set embedpy3=true ${MONETDB_DB_NAME}
   fi
 
-  if [ ${MONETDB_EMBEDDED_R} = 'true' ]; then
-    monetdb set embedr=true ${MONETDB_DB_NAME}
-  fi
+#  if [ ${MONETDB_EMBEDDED_R} = 'true' ]; then
+#    monetdb set embedr=true ${MONETDB_DB_NAME}
+#  fi
 
   monetdb release ${MONETDB_DB_NAME}
   monetdbd stop ${MONETDB_DIR}/${MONETDB_DBFARM_NAME}
