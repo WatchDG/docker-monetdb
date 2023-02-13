@@ -1,5 +1,6 @@
 FROM debian:bullseye-slim
-RUN apt-get update && apt-get install -y wget xz-utils bison cmake gcc pkg-config python3 &&  \
+RUN apt-get update &&  \
+    apt-get install -y wget xz-utils bison cmake gcc pkg-config python3 &&  \
     apt-get install -y python3-dev libbz2-dev libpcre3-dev libreadline-dev liblzma-dev zlib1g-dev
 RUN mkdir /tmp/build &&  \
     cd /tmp/build &&  \
